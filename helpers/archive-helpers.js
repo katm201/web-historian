@@ -25,13 +25,14 @@ exports.initialize = function(pathsObj) {
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
-exports.readListOfUrls = function(callback) {
-  fs.readFile('../archives/sites.txt', 'utf8', function(err, data) {
+exports.readListOfUrls = function(callback, path) {
+  path = path || '../archives/sites.txt';
+  fs.readFile(path, 'utf8', function(err, data) {
     if (err) {
       console.error(err);
     }
     
-    console.log(data);
+    // console.log(data);
     var urls = data.split('\n');
     callback(urls);
   });
