@@ -101,12 +101,12 @@ describe('archive helpers', function() {
       archive.isUrlInList('example1.com', function (exists) {
         expect(exists).to.be.true;
         if (++counter === total) { done(); }
-      });
+      }, archive.paths.list);
 
       archive.isUrlInList('gibberish', function (exists) {
         expect(exists).to.be.false;
         if (++counter === total) { done(); }
-      });
+      }, archive.paths.list);
     });
   });
 

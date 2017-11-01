@@ -38,7 +38,11 @@ exports.readListOfUrls = function(callback, path) {
   });
 };
 
-exports.isUrlInList = function(url, callback) {
+exports.isUrlInList = function(url, callback, path) {
+  path = path || '../archives/sites.txt';
+  exports.readListOfUrls(function(urls) {
+    callback(urls.indexOf(url) > -1);
+  }, path);
 };
 
 exports.addUrlToList = function(url, callback) {
