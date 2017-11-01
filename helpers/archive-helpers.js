@@ -57,7 +57,17 @@ exports.addUrlToList = function(url, callback, path) {
   }, path);
 };
 
-exports.isUrlArchived = function(url, callback) {
+exports.isUrlArchived = function(url, callback, path) {
+  path = path || '../archives/sites/';
+  filePath = path.substring(0, path.length - 1) + '.txt';
+  exports.isUrlInList(url, function() {
+    fs.readdir(path, 'utf8', function(err, files) {
+      if (err) {
+        console.error(err);
+      }
+      callback(files.indexOf(url) > -1);
+    });
+  }, filePath);
 };
 
 exports.downloadUrls = function(urls) {

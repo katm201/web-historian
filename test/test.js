@@ -80,7 +80,6 @@ describe('archive helpers', function() {
   describe('#readListOfUrls', function () {
     it('should read urls from sites.txt', function (done) {
       var urlArray = ['example1.com', 'example2.com'];
-      console.log('test path: ', archive.paths.list);
       fs.writeFileSync(archive.paths.list, urlArray.join('\n'));
 
       archive.readListOfUrls(function(urls) {
@@ -134,12 +133,12 @@ describe('archive helpers', function() {
       archive.isUrlArchived('www.example.com', function (exists) {
         expect(exists).to.be.true;
         if (++counter === total) { done(); }
-      });
+      }, archive.paths.archivedSites + '/');
 
       archive.isUrlArchived('www.notarchived.com', function (exists) {
         expect(exists).to.be.false;
         if (++counter === total) { done(); }
-      });
+      }, archive.paths.archivedSites + '/');
     });
   });
 
