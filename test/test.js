@@ -119,8 +119,8 @@ describe('archive helpers', function() {
         archive.isUrlInList('someurl.com', function (exists) {
           expect(exists).to.be.true;
           done();
-        });
-      });
+        }, archive.paths.list);
+      }, archive.paths.list);
     });
   });
 

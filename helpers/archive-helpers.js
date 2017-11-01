@@ -31,8 +31,6 @@ exports.readListOfUrls = function(callback, path) {
     if (err) {
       console.error(err);
     }
-    
-    // console.log(data);
     var urls = data.split('\n');
     callback(urls);
   });
@@ -45,7 +43,18 @@ exports.isUrlInList = function(url, callback, path) {
   }, path);
 };
 
-exports.addUrlToList = function(url, callback) {
+exports.addUrlToList = function(url, callback, path) {
+  path = path || '../archives/sites.txt';
+  exports.isUrlInList(url, function(isInList) {
+    if (!isInList) {
+      fs.appendFile(path, url, function(err) {
+        if (err) {
+          console.error(err);
+        }
+        callback();
+      });
+    }
+  }, path);
 };
 
 exports.isUrlArchived = function(url, callback) {
