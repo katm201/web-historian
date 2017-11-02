@@ -63,10 +63,10 @@ describe('server', function() {
           .post('/')
           .type('form')
           .send({ url: url })
-          .expect(302, function (err) {
+          .expect(201, function (err) {
             if (!err) {
               var fileContents = fs.readFileSync(archive.paths.list, 'utf8');
-              console.log(archive.paths.list);
+              // console.log(archive.paths.list);
               expect(fileContents).to.equal(url + '\n');
             }
 

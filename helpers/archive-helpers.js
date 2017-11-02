@@ -32,15 +32,23 @@ exports.readListOfUrls = function(callback, path) {
     if (err) {
       console.error(err);
     }
-    var urls = data.split('\n');
-    callback(urls);
+    if (data) {
+      var urls = data.split('\n');
+      callback(urls);
+    } else {
+      callback(data);
+    }
   });
 };
 
 exports.isUrlInList = function(url, callback, path) {
   path = path || '../archives/sites.txt';
   exports.readListOfUrls(function(urls) {
-    callback(urls.indexOf(url) > -1);
+    if (urls !== undefined) {
+      callback(urls.indexOf(url) > -1);
+    } else {
+      callback(false);
+    }
   }, path);
 };
 
@@ -48,7 +56,7 @@ exports.addUrlToList = function(url, callback, path) {
   path = path || '../archives/sites.txt';
   exports.isUrlInList(url, function(isInList) {
     if (!isInList) {
-      fs.appendFile(path, url, function(err) {
+      fs.appendFile(path, url + '\n', function(err) {
         if (err) {
           console.error(err);
         }
@@ -60,7 +68,9 @@ exports.addUrlToList = function(url, callback, path) {
 
 exports.isUrlArchived = function(url, callback, path) {
   path = path || '../archives/sites/';
-  filePath = path.substring(0, path.length - 1) + '.txt';
+  var substr;
+  path[path.length - 1] === '/' ? substr = path.substring(0, path.length - 1) : substr = path; 
+  filePath = substr + '.txt';
   exports.isUrlInList(url, function() {
     fs.readdir(path, 'utf8', function(err, files) {
       if (err) {
