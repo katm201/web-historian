@@ -21,8 +21,25 @@ exports.handleRequest = function (request, response) {
   urlInfo.pathname.length > 1 ? asset = (filePath + urlInfo.pathname) : asset = 'web/public/index.html';
 
   if (request.method === 'GET') {
-    response.writeHead(200, httpHelpers.headers);
-    httpHelpers.serveAssets(response, asset);
+    // reads our directory
+    fs.readdir(filePath, 'utf8', function(err, files) {
+      if (err) {
+        console.error(err);
+      }
+      // if our filepath is index.html or is present in
+      // our files array, return 200 and serve the asset
+      if (urlInfo.pathname === '/' || files.indexOf(urlInfo.pathname.slice(1)) > -1) {
+        response.writeHead(200, httpHelpers.headers);
+        httpHelpers.serveAssets(response, asset);
+      } else {
+      // otherwise, return 404 not found
+        response.writeHead(404, httpHelpers.headers);
+        response.end('Not Found');
+      }
+    });
+    
+    
+
   }    
 
 
