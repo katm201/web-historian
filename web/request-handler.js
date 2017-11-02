@@ -13,8 +13,8 @@ var urlParser = require('url');
 
 exports.handleRequest = function (request, response) {
   // note: must change hardcoded file path once done with tests!
-  // var filePath = 'archives/sites';
-  var filePath = 'test/testdata/sites';
+  var filePath = 'archives/sites';
+  // var filePath = 'test/testdata/sites';
   var urlInfo = urlParser.parse(request.url);
   
   var loading = 'web/public/loading.html';
@@ -44,18 +44,15 @@ exports.handleRequest = function (request, response) {
       archive.isUrlArchived(url, (found) => {
         if (found) {
           response.writeHead(302, httpHelpers.headers);
-          response.end(asset); 
+          httpHelpers.serveAssets(response, filePath + '/' + url);
         } else {
           archive.addUrlToList(url, () => {
             response.writeHead(201, httpHelpers.headers);
-            response.end(loading);
+            httpHelpers.serveAssets(response, loading);
           }, filePath + '.txt');
         }
       }, filePath);
     });
   }
-
-
-
 };
 
