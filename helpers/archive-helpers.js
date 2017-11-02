@@ -82,9 +82,14 @@ exports.isUrlArchived = function(url, callback, path) {
 };
 
 exports.downloadUrls = function(urls, path) {
-  path = path || '../archives/sites/';
+  // path = path || '../archives/sites/';
+  urls = urls.filter(function(item) {
+    if (item !== '') {
+      return true;
+    }
+  });
   for (var i = 0; i < urls.length; i++) {
-    downloadFile(urls[i], {directory: path, filename: urls[i]}, function(err) { 
+    downloadFile('http://' + urls[i], {directory: path + '/', filename: urls[i]}, function(err) { 
       if (err) {
         console.error(err);
       }
