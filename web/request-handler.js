@@ -13,9 +13,11 @@ var urlParser = require('url');
 
 exports.handleRequest = function (request, response) {
   // note: must change hardcoded file path once done with tests!
-  // var filePath 'archives/sites';
+  // var filePath = 'archives/sites';
   var filePath = 'test/testdata/sites';
   var urlInfo = urlParser.parse(request.url);
+  
+  var loading = 'web/public/loading.html';
 
   var asset;
   urlInfo.pathname.length > 1 ? asset = (filePath + urlInfo.pathname) : asset = 'web/public/index.html';
@@ -37,12 +39,34 @@ exports.handleRequest = function (request, response) {
         response.end('Not Found');
       }
     });
-    
-    
+  }
+  if (request.method === 'POST') {
+    // build body
+    var body = '';
+    request.on('data', chunk => { body += chunk; } );
+    // when finished building body
+    request.on('end', function() {
+      // check the directory
+      fs.readdir(filePath, 'utf8', function(err, files) {
+        // if it exists in our directory, serve it up
+        var url = body.slice(4);
+        if (files.indexOf(url) > -1) {
+          response.writeHead(302, httpHelpers.headers);
+          httpHelpers.serveAssets(response, asset);
+        } else {
+        // if it doesn't exist, 
+          // serve the loading page
+          response.writeHead(201, httpHelpers.headers);
+          httpHelpers.serveAssets(response, loading);
+          // add website to queue
+          console.log(files);
+          archive.addUrlToList(url, function() {}, filePath);
+        }
+      });
+    });
+  }
 
-  }    
 
 
-  // response.end(archive.paths.list);
 };
 
