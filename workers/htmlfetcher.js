@@ -4,7 +4,7 @@
 var archive = require('../helpers/archive-helpers.js');
 var fs = require('fs');
 
-var checkQueue = function() {
+checkQueue = function() {
   archive.readListOfUrls(function(urls) {
     if (urls) {
       console.log('download in progress');
@@ -20,3 +20,5 @@ var checkQueue = function() {
 };
 
 checkQueue();
+
+exports.checkQueue = checkQueue;
