@@ -18,4 +18,4 @@ if (module.parent) {
   console.log('Listening on http://' + ip + ':' + port);
 }
 
-setTimeout(htmlFetcher.checkQueue, 60000);
+// setInterval(htmlFetcher.checkQueue, 60000);

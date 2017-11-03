@@ -6,6 +6,7 @@ var fs = require('fs');
 
 checkQueue = function() {
   archive.readListOfUrls(function(urls) {
+    console.log('checking...');
     if (urls) {
       console.log('download in progress');
       archive.downloadUrls(urls, archive.paths.archivedSites);
